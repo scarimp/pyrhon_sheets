@@ -363,10 +363,10 @@ Descriptor
     >>> hasattr(ex3, 'x')
     False
 
-Singleton
----------
+Singleton Decorator
+-------------------
 
-The singleton is a design pattern that restricts the creation of instances of a class so that it only creates one instance of the class that implements it.
+Singleton is a design pattern that restricts the creation of instances of a class so that it only creates one instance of the class that implements it.
 
 .. code-block:: python
 
