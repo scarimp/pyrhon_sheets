@@ -363,6 +363,41 @@ Descriptor
     >>> hasattr(ex3, 'x')
     False
 
+Singleton Decorator
+-------------------
+
+Singleton is a design pattern that restricts the creation of instances of a class so that it only creates one instance of the class that implements it.
+
+.. code-block:: python
+
+    #!/usr/bin/env python3
+    """Singleton decorator class."""
+
+    class Singleton(object):
+
+        def __init__(self, cls):
+            self.__cls = cls
+            self.__obj = None
+
+        def __call__(self, *args, **kwargs):
+            if not self.__obj:
+                self.__obj = self.__cls(*args, **kwargs)
+            return self.__obj
+
+    if __name__ == "__main__":
+        # Testing ...
+
+        @Singleton
+        class Test(object):
+
+            def __init__(self, text):
+                self.text = text
+
+        a = Test("Hello")
+        b = Test("World")
+
+        print("id(a):", id(a), "id(b):", id(b), "Diff:", id(a)-id(b))
+
 Static and Class Methond
 ------------------------
 
