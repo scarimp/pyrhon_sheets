@@ -20,7 +20,7 @@
 .. raw:: html
 
     <a href="https://tracking.gitads.io/?repo=pysheeet" target="_blank">
-        <img src="https://images.gitads.io/pysheeet" alt="GitAds" hight="25%" width="25%" align="right">
+        <img src="https://images.gitads.io/pysheeet" alt="GitAds" hight="30%" width="30%" align="right">
     </a>
 
 Introduction
