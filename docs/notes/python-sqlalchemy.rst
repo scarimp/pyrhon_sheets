@@ -155,6 +155,43 @@ Reflection - Loading Table from Existing Database
     metadata.reflect(bind=engine)
     print(metadata.tables)
 
+Print Create Table Statement with Indexes (SQL DDL)
+----------------------------------------------------
+
+.. code-block:: python
+
+    from sqlalchemy import create_engine
+    from sqlalchemy import MetaData
+    from sqlalchemy import Table
+    from sqlalchemy import Column
+    from sqlalchemy import Integer
+    from sqlalchemy import String
+
+    def metadata_dump(sql, *multiparams, **params):
+        print(sql.compile(dialect=engine.dialect))
+
+    meta = MetaData()
+    example_table = Table('Example',meta,
+                          Column('id', Integer, primary_key=True),
+                          Column('name', String(10), index=True))
+
+    db_uri = 'sqlite:///db.sqlite'
+    engine = create_engine(db_uri, strategy='mock', executor=metadata_dump)
+
+    meta.create_all(bind=engine, tables=[example_table])
+
+output:
+
+.. code-block:: sql
+
+    CREATE TABLE "Example" (
+        id INTEGER NOT NULL,
+        name VARCHAR(10),
+        PRIMARY KEY (id)
+    )
+
+    CREATE INDEX "ix_Example_name" ON "Example" (name)
+
 Get Table from MetaData
 ------------------------
 
