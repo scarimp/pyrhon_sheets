@@ -583,7 +583,7 @@ Fastest Bulk Insert in PostgreSQL via "COPY" Statement
     )
     meta.create_all()
 
-    # file-like object
+    # file-like object (tsv format)
     datafile = io.StringIO()
 
     # generate rows
@@ -610,7 +610,7 @@ Fastest Bulk Insert in PostgreSQL via "COPY" Statement
             sep='\t',
             columns=('first_name', 'age', 'birth_day'),
         )
-        conn.commit()
+    conn.commit()
 
 Delete Rows from Table
 ------------------------
