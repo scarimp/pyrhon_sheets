@@ -612,6 +612,66 @@ Fastest Bulk Insert in PostgreSQL via "COPY" Statement
         )
     conn.commit()
 
+Bulk PostgreSQL Insert and Return Inserted IDs
+-----------------------------------------------
+
+.. code-block:: python
+
+    from sqlalchemy.engine.url import URL
+    from sqlalchemy import create_engine
+    from sqlalchemy import MetaData
+    from sqlalchemy import Table
+    from sqlalchemy import Column
+    from sqlalchemy import Integer
+    from sqlalchemy import String
+
+    db_url = {'drivername': 'postgres',
+            'username': 'postgres',
+            'password': 'postgres',
+            'host': '192.168.99.100',
+            'port': 5432}
+    engine = create_engine(URL(**db_url))
+
+    # create table
+    meta = MetaData(engine)
+    table = Table('userinfo', meta,
+        Column('id', Integer, primary_key=True),
+        Column('first_name', String),
+        Column('age', Integer),
+    )
+    meta.create_all()
+
+    # generate rows
+    data = [{'first_name': f'Name {i}', 'age': 18+i} for i in range(10)]
+
+    stmt = table.insert().values(data).returning(table.c.id)
+    # converted into SQL:
+    # INSERT INTO userinfo (first_name, age) VALUES
+    #  (%(first_name_m0)s, %(age_m0)s), (%(first_name_m1)s, %(age_m1)s),
+    #  (%(first_name_m2)s, %(age_m2)s), (%(first_name_m3)s, %(age_m3)s),
+    #  (%(first_name_m4)s, %(age_m4)s), (%(first_name_m5)s, %(age_m5)s),
+    #  (%(first_name_m6)s, %(age_m6)s), (%(first_name_m7)s, %(age_m7)s),
+    #  (%(first_name_m8)s, %(age_m8)s), (%(first_name_m9)s, %(age_m9)s)
+    # RETURNING userinfo.id
+    for rowid in engine.execute(stmt).fetchall():
+        print(rowid['id'])
+
+output:
+
+.. code-block:: bash
+
+    $ python sqlalchemy_bulk.py
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+
 Delete Rows from Table
 ------------------------
 
