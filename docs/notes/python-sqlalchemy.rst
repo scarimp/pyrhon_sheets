@@ -672,6 +672,57 @@ output:
     9
     10
 
+Update Multiple Rows
+---------------------
+
+.. code-block:: python
+
+    from sqlalchemy.engine.url import URL
+    from sqlalchemy import create_engine
+    from sqlalchemy import MetaData
+    from sqlalchemy import Table
+    from sqlalchemy import Column
+    from sqlalchemy import Integer
+    from sqlalchemy import String
+    from sqlalchemy.sql.expression import bindparam
+
+    db_url = {'drivername': 'postgres',
+            'username': 'postgres',
+            'password': 'postgres',
+            'host': '192.168.99.100',
+            'port': 5432}
+    engine = create_engine(URL(**db_url))
+
+    # create table
+    meta = MetaData(engine)
+    table = Table('userinfo', meta,
+        Column('id', Integer, primary_key=True),
+        Column('first_name', String),
+        Column('birth_year', Integer),
+    )
+    meta.create_all()
+
+    # update data
+    data = [
+        {'_id': 1, 'first_name': 'Johnny', 'birth_year': 1975},
+        {'_id': 2, 'first_name': 'Jim', 'birth_year': 1973},
+        {'_id': 3, 'first_name': 'Kaley', 'birth_year': 1985},
+        {'_id': 4, 'first_name': 'Simon', 'birth_year': 1980},
+        {'_id': 5, 'first_name': 'Kunal', 'birth_year': 1981},
+        {'_id': 6, 'first_name': 'Mayim', 'birth_year': 1975},
+        {'_id': 7, 'first_name': 'Melissa', 'birth_year': 1980},
+    ]
+
+    stmt = table.update().where(table.c.id == bindparam('_id')).\
+           values({
+               'first_name': bindparam('first_name'),
+               'birth_year': bindparam('birth_year'),
+           })
+    # conveted to SQL:
+    # UPDATE userinfo SET first_name=%(first_name)s, birth_year=%(birth_year)s WHERE userinfo.id = %(_id)s
+
+    engine.execute(stmt, data)
+
 Delete Rows from Table
 ------------------------
 
