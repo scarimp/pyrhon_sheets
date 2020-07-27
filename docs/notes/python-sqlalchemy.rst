@@ -547,6 +547,182 @@ join() - Joined Two Tables via "JOIN" Statement
     for _row in res:
         print(_row)
 
+Fastest Bulk Insert in PostgreSQL via "COPY" Statement
+-------------------------------------------------------
+
+.. code-block:: python
+
+    # This method found here: https://gist.github.com/jsheedy/efa9a69926a754bebf0e9078fd085df6
+    import io
+    from datetime import date
+
+    from sqlalchemy.engine.url import URL
+    from sqlalchemy import create_engine
+    from sqlalchemy import MetaData
+    from sqlalchemy import Table
+    from sqlalchemy import Column
+    from sqlalchemy import Integer
+    from sqlalchemy import String
+    from sqlalchemy import Date
+
+
+    db_url = {'drivername': 'postgres',
+            'username': 'postgres',
+            'password': 'postgres',
+            'host': '192.168.99.100',
+            'port': 5432}
+    engine = create_engine(URL(**db_url))
+
+    # create table
+    meta = MetaData(engine)
+    table = Table('userinfo', meta,
+        Column('id', Integer, primary_key=True),
+        Column('first_name', String),
+        Column('age', Integer),
+        Column('birth_day', Date),
+    )
+    meta.create_all()
+
+    # file-like object (tsv format)
+    datafile = io.StringIO()
+
+    # generate rows
+    for i in range(100):
+        line = '\t'.join(
+            [
+                f'Name {i}',    # first_name
+                str(18 + i),    # age
+                str(date.today()),   # birth_day
+            ]
+        )
+        datafile.write(line + '\n')
+
+    # reset file to start
+    datafile.seek(0)
+
+    # bulk insert via `COPY` statement
+    conn = engine.raw_connection()
+    with conn.cursor() as cur:
+        # https://www.psycopg.org/docs/cursor.html#cursor.copy_from
+        cur.copy_from(
+            datafile,
+            table.name,  # table name
+            sep='\t',
+            columns=('first_name', 'age', 'birth_day'),
+        )
+    conn.commit()
+
+Bulk PostgreSQL Insert and Return Inserted IDs
+-----------------------------------------------
+
+.. code-block:: python
+
+    from sqlalchemy.engine.url import URL
+    from sqlalchemy import create_engine
+    from sqlalchemy import MetaData
+    from sqlalchemy import Table
+    from sqlalchemy import Column
+    from sqlalchemy import Integer
+    from sqlalchemy import String
+
+    db_url = {'drivername': 'postgres',
+            'username': 'postgres',
+            'password': 'postgres',
+            'host': '192.168.99.100',
+            'port': 5432}
+    engine = create_engine(URL(**db_url))
+
+    # create table
+    meta = MetaData(engine)
+    table = Table('userinfo', meta,
+        Column('id', Integer, primary_key=True),
+        Column('first_name', String),
+        Column('age', Integer),
+    )
+    meta.create_all()
+
+    # generate rows
+    data = [{'first_name': f'Name {i}', 'age': 18+i} for i in range(10)]
+
+    stmt = table.insert().values(data).returning(table.c.id)
+    # converted into SQL:
+    # INSERT INTO userinfo (first_name, age) VALUES
+    #  (%(first_name_m0)s, %(age_m0)s), (%(first_name_m1)s, %(age_m1)s),
+    #  (%(first_name_m2)s, %(age_m2)s), (%(first_name_m3)s, %(age_m3)s),
+    #  (%(first_name_m4)s, %(age_m4)s), (%(first_name_m5)s, %(age_m5)s),
+    #  (%(first_name_m6)s, %(age_m6)s), (%(first_name_m7)s, %(age_m7)s),
+    #  (%(first_name_m8)s, %(age_m8)s), (%(first_name_m9)s, %(age_m9)s)
+    # RETURNING userinfo.id
+    for rowid in engine.execute(stmt).fetchall():
+        print(rowid['id'])
+
+output:
+
+.. code-block:: bash
+
+    $ python sqlalchemy_bulk.py
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+
+Update Multiple Rows
+---------------------
+
+.. code-block:: python
+
+    from sqlalchemy.engine.url import URL
+    from sqlalchemy import create_engine
+    from sqlalchemy import MetaData
+    from sqlalchemy import Table
+    from sqlalchemy import Column
+    from sqlalchemy import Integer
+    from sqlalchemy import String
+    from sqlalchemy.sql.expression import bindparam
+
+    db_url = {'drivername': 'postgres',
+            'username': 'postgres',
+            'password': 'postgres',
+            'host': '192.168.99.100',
+            'port': 5432}
+    engine = create_engine(URL(**db_url))
+
+    # create table
+    meta = MetaData(engine)
+    table = Table('userinfo', meta,
+        Column('id', Integer, primary_key=True),
+        Column('first_name', String),
+        Column('birth_year', Integer),
+    )
+    meta.create_all()
+
+    # update data
+    data = [
+        {'_id': 1, 'first_name': 'Johnny', 'birth_year': 1975},
+        {'_id': 2, 'first_name': 'Jim', 'birth_year': 1973},
+        {'_id': 3, 'first_name': 'Kaley', 'birth_year': 1985},
+        {'_id': 4, 'first_name': 'Simon', 'birth_year': 1980},
+        {'_id': 5, 'first_name': 'Kunal', 'birth_year': 1981},
+        {'_id': 6, 'first_name': 'Mayim', 'birth_year': 1975},
+        {'_id': 7, 'first_name': 'Melissa', 'birth_year': 1980},
+    ]
+
+    stmt = table.update().where(table.c.id == bindparam('_id')).\
+           values({
+               'first_name': bindparam('first_name'),
+               'birth_year': bindparam('birth_year'),
+           })
+    # conveted to SQL:
+    # UPDATE userinfo SET first_name=%(first_name)s, birth_year=%(birth_year)s WHERE userinfo.id = %(_id)s
+
+    engine.execute(stmt, data)
+
 Delete Rows from Table
 ------------------------
 
