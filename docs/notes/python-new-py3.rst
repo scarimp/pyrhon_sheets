@@ -884,6 +884,33 @@ Positional-only parameters
       File "<stdin>", line 1, in <module>
     TypeError: f() got some positional-only arguments passed as keyword arguments: 'b'
 
+Dictionary Merge
+----------------
+
+**New in Python 3.9**
+
+- PEP 584_  - Add Union Operators To dict
+
+.. code-block:: python
+
+    >>> a = {"foo": "Foo"}
+    >>> b = {"bar": "Bar"}
+
+    # old way
+    >>> {**a, **b}
+    {'foo': 'Foo', 'bar': 'Bar'}
+    >>> a.update(b)
+    >>> a
+    {'foo': 'Foo', 'bar': 'Bar'}
+
+    # new way
+    >>> a | b
+    {'foo': 'Foo', 'bar': 'Bar'}
+    >>> a |= b
+    >>> a
+    {'foo': 'Foo', 'bar': 'Bar'}
+
+
 
 .. _3105: https://www.python.org/dev/peps/pep-3105/
 .. _3138: https://www.python.org/dev/peps/pep-3138/
@@ -916,3 +943,4 @@ Positional-only parameters
 .. _401: https://www.python.org/dev/peps/pep-0401/
 .. _572: https://www.python.org/dev/peps/pep-0572/
 .. _570: https://www.python.org/dev/peps/pep-0570/
+.. _584: https://www.python.org/dev/peps/pep-0584/
