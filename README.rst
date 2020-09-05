@@ -17,12 +17,6 @@
       </a>
     </p>
 
-.. raw:: html
-
-    <a href="https://tracking.gitads.io/?repo=pysheeet">
-        <img src="https://images.gitads.io/pysheeet" alt="GitAds" hight="30%" width="30%" align="right">
-    </a>
-
 Introduction
 =============
 
