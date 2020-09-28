@@ -183,11 +183,13 @@ sidebar_index = [
     'about.html',
     'sidebarintro.html',
     'link.html',
+    'cheatsheets.html',
 ]
 sidebar_notes = [
     'about.html',
     'sidebarintro.html',
     'link.html',
+    'cheatsheets.html',
 ]
 
 if has_carbonad:
