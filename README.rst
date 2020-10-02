@@ -21,7 +21,7 @@ Introduction
 =============
 
 Pysheeet was created with intention of collecting python code snippets for
-reducing coding hours and making life easier. Any contributions are welcome.
+reducing coding hours and making life easier and faster. Any contributions are welcome.
 Please feel free to fork and send a pull request to this project.
 
 
