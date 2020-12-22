@@ -148,7 +148,7 @@ such as list or tuple at the same time, using ``enumerate`` is better than
 for ... else ...
 ----------------
 
-It may be a little weired when we see the ``else`` belongs to a ``for`` loop at
+It may be a little weird when we see the ``else`` belongs to a ``for`` loop at
 the first time. The ``else`` clause can assist us to avoid using flag
 variables in loops. A loop’s ``else`` clause runs when no break occurs.
 
