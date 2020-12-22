@@ -225,3 +225,101 @@ Get Path Properties
     'README'
     >>> p.as_uri()
     'file:///Users/Guido/pysheeet/README.rst'
+
+Linux Inotify
+-------------
+
+.. code-block:: python3
+
+    import selectors
+    import struct
+    import ctypes
+    import os
+
+    from pathlib import Path
+    from ctypes.util import find_library
+
+    # ref: <sys/inotify.h>
+    IN_CREATE = 0x00000100
+    IN_DELETE = 0x00000200
+
+    INOTIFY_EVENT = "iIII"
+    INOTIFY_EVENT_LEN = struct.calcsize(INOTIFY_EVENT)
+
+    lib = find_library("c")
+    assert lib
+
+    libc = ctypes.CDLL(lib)
+
+
+    class Inotify(object):
+        def __init__(self, path):
+            self._path = path
+            self._fd = None
+            self._wd = None
+            self._buf = b""
+            self._sel = selectors.DefaultSelector()
+
+        def init(self):
+            fd = libc.inotify_init()
+            if fd < 0:
+                errno = ctypes.get_errno()
+                raise OSError(errno, f"{os.strerror(errno)}")
+            return fd
+
+        def watch(self, fd, path):
+            p = str(path).encode("utf8")
+            wd = libc.inotify_add_watch(fd, p, IN_CREATE | IN_DELETE)
+            if wd < 0:
+                errno = ctypes.get_errno()
+                raise OSError(errno, f"{os.strerror(errno)}")
+            return wd
+
+        def remove(self, fd, wd):
+            libc.inotify_rm_watch(self._fd, self._wd)
+
+        def handle(self, fd, *a):
+            b = os.read(fd, 1024)
+            if not b:
+                return
+            for mask, f in self.parse(b):
+                print(mask, f)
+
+        def parse(self, buf):
+            self._buf += buf
+            while True:
+                l = len(self._buf)
+                if l < INOTIFY_EVENT_LEN:
+                    break
+
+                hd = self._buf[:INOTIFY_EVENT_LEN]
+                wd, mask, cookie, length = struct.unpack(INOTIFY_EVENT, hd)
+                event_length = INOTIFY_EVENT_LEN + length
+                if l < event_length:
+                    break
+
+                filename = self._buf[INOTIFY_EVENT_LEN:event_length]
+                self._buf = self._buf[event_length:]
+                yield mask, filename.rstrip(b"\0").decode("utf8")
+
+        def __enter__(self):
+            self._fd = self.init()
+            self._wd = self.watch(self._fd, self._path)
+            self._sel.register(self._fd, selectors.EVENT_READ, self.handle)
+            return self
+
+        def __exit__(self, *e):
+            self.remove(self._fd, self._wd)
+            if len(e) > 0 and e[0]:
+                print(e)
+
+        def run(self):
+            while True:
+                events = self._sel.select()
+                for k, mask in events:
+                    cb = k.data
+                    cb(k.fileobj, mask)
+
+
+    with Inotify(Path("/tmp")) as i:
+        i.run()
