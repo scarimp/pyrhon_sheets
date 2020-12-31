@@ -234,6 +234,7 @@ Linux Inotify
     import selectors
     import struct
     import ctypes
+    import sys
     import os
 
     from pathlib import Path
@@ -282,8 +283,7 @@ Linux Inotify
             b = os.read(fd, 1024)
             if not b:
                 return
-            for mask, f in self.parse(b):
-                print(mask, f)
+            yield from self.parse(b);
 
         def parse(self, buf):
             self._buf += buf
@@ -311,15 +311,16 @@ Linux Inotify
         def __exit__(self, *e):
             self.remove(self._fd, self._wd)
             if len(e) > 0 and e[0]:
-                print(e)
+                print(e, file=sys.stderr)
 
         def run(self):
             while True:
                 events = self._sel.select()
                 for k, mask in events:
                     cb = k.data
-                    cb(k.fileobj, mask)
+                    yield from cb(k.fileobj, mask)
 
 
     with Inotify(Path("/tmp")) as i:
-        i.run()
+        for m, f in i.run():
+            print(m, f)
