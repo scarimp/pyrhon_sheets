@@ -600,3 +600,25 @@ is useful since it converts a comparison function to a key function.
     >>> nodes.sort(key=cmp_to_key(lambda x,y: x.val - y.val))
     >>> nodes
     [Node(1), Node(2), Node(3)]
+
+Circular Buffer
+---------------
+
+.. code-block:: python
+
+    >>> from collections import deque
+    >>> d = deque(maxlen=8)
+    >>> for x in range(9):
+    ...     d.append(x)
+    ...
+    >>> d
+    deque([1, 2, 3, 4, 5, 6, 7, 8], maxlen=8)
+
+.. code-block:: python
+
+    >>> from collections import deque
+    >>> def tail(path, n=10):
+    ...     with open(path) as f:
+    ...         return deque(f, n)
+    ...
+    >>> tail("/etc/hosts")
