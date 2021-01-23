@@ -226,6 +226,20 @@ Get Path Properties
     >>> p.as_uri()
     'file:///Users/Guido/pysheeet/README.rst'
 
+Read a gzip CSV
+---------------
+
+.. code-block:: python
+
+    import gzip
+    import csv
+
+    f = "example.gz"
+    with gzip.open(f, 'rt', newline='') as gz:
+        reader = csv.DictReader(gz)
+        for row in reader:
+            print(row)
+
 Linux Inotify
 -------------
 
