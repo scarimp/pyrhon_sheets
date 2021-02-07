@@ -601,6 +601,49 @@ is useful since it converts a comparison function to a key function.
     >>> nodes
     [Node(1), Node(2), Node(3)]
 
+Sorted List
+-----------
+
+.. code-block:: python
+
+    import bisect
+
+    class Foo(object):
+        def __init__(self, k):
+            self.k = k
+
+        def __eq__(self, rhs):
+            return self.k == rhs.k
+
+        def __ne__(self, rhs):
+            return self.k != rhs.k
+
+        def __lt__(self, rhs):
+            return self.k < rhs.k
+
+        def __gt__(self, rhs):
+            return self.k > rhs.k
+
+        def __le__(self, rhs):
+            return self.k <= rhs.k
+
+        def __ge__(self, rhs):
+            return self.k >= rhs.k
+
+        def __repr__(self):
+            return f"Foo({self.k})"
+
+        def __str__(self):
+            return self.__repr__()
+
+    foo = [Foo(1), Foo(3), Foo(2), Foo(0)]
+    bar = []
+    for x in foo:
+        bisect.insort(bar, x)
+
+    print(bar) # [Foo(0), Foo(1), Foo(2), Foo(3)]
+
+
 Circular Buffer
 ---------------
 
