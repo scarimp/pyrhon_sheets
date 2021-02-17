@@ -56,6 +56,7 @@ only includes basic Python features but also data structures and algorithms.
    notes/python-object
    notes/python-generator
    notes/python-typing
+   notes/python-date
    notes/python-io
 
 

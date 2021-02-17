@@ -49,6 +49,7 @@ Cheat Sheet
 - `Class <docs/notes/python-object.rst>`_
 - `Generator <docs/notes/python-generator.rst>`_
 - `Typing <docs/notes/python-typing.rst>`_
+- `Time <docs/notes/python-date.rst>`_
 - `File <docs/notes/python-io.rst>`_
 
 
