@@ -58,6 +58,7 @@ only includes basic Python features but also data structures and algorithms.
    notes/python-typing
    notes/python-date
    notes/python-io
+   notes/python-os
 
 
 Advanced Cheat Sheet

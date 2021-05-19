@@ -51,6 +51,7 @@ Cheat Sheet
 - `Typing <docs/notes/python-typing.rst>`_
 - `Time <docs/notes/python-date.rst>`_
 - `File <docs/notes/python-io.rst>`_
+- `Operating System <docs/notes/python-os.rst>`_
 
 
 Advanced Cheat Sheet
