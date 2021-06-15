@@ -1,5 +1,7 @@
 """Test app.py."""
 
+import multiprocessing
+import platform
 import unittest
 import requests
 import os
@@ -11,6 +13,10 @@ from app import acme, find_key, static_proxy, index_redirection, page_not_found
 
 from app import ROOT
 from app import app
+
+
+if platform.system() == "Darwin":
+    multiprocessing.set_start_method("fork")
 
 
 class PysheeetTest(LiveServerTestCase):
@@ -37,7 +43,7 @@ class PysheeetTest(LiveServerTestCase):
     def check_security_headers(self, resp):
         """Check security headers."""
         headers = resp.headers
-        self.assertTrue("X-Content-Security-Policy" in headers)
+        self.assertTrue("Content-Security-Policy" in headers)
         self.assertTrue("X-XSS-Protection" in headers)
         self.assertTrue("X-Content-Type-Options" in headers)
         self.assertTrue("Content-Security-Policy" in headers)
