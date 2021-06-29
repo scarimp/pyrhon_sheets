@@ -127,7 +127,8 @@ Basic types
     var_set: Set[int] = {i for i in range(3)}
     var_dict: Dict[str, str] = {"foo": "Foo"}
     var_list: List[int] = [i for i in range(3)]
-    var_Tuple: Tuple = (1, 2, 3)
+    var_static_length_Tuple: Tuple[int, int, int] = (1, 2, 3)
+    var_dynamic_length_Tuple: Tuple[int, ...] = (i for i in range(10, 3))
     var_deque: Deque = deque([1, 2, 3])
     var_nametuple: NamedTuple = namedtuple('P', ['x', 'y'])
 
