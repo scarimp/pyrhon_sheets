@@ -160,3 +160,78 @@ Emulating a Dictionary
     1 3 5
     >>> '1' in emud  # __contains__
     True
+
+LRU Cache
+---------
+
+.. code-block:: python
+
+	from collections import OrderedDict
+
+
+	class LRU(object):
+		def __init__(self, maxsize=128):
+			self._maxsize = maxsize
+			self._cache = OrderedDict()
+
+		def get(self, k):
+			if k not in self._cache:
+				return None
+
+			self._cache.move_to_end(k)
+			return self._cache[k]
+
+		def put(self, k, v):
+			if k in self._cache:
+				self._cache.move_to_end(k)
+			self._cache[k] = v
+			if len(self._cache) > self._maxsize:
+				self._cache.popitem(last=False)
+
+		def __str__(self):
+			return str(self._cache)
+
+		def __repr__(self):
+			return self.__str__()
+
+Note that dictionaries preserve insertion order from Python 3.7. Moreover,
+updating a key does not affect the order. Therefore, a dictionary can also
+simulate an LRU cache, which is similar to using an OrderedDict.
+
+.. code-block:: python
+
+	class LRU(object):
+		def __init__(self, maxsize=128):
+			self._maxsize = maxsize
+			self._cache = {}
+
+		def get(self, k):
+			if k not in self._cache:
+				return None
+
+			self.move_to_end(k)
+			return self._cache[k]
+
+		def put(self, k, v):
+			if k in self._cache:
+				self.move_to_end(k)
+			self._cache[k] = v
+			if len(self._cache) > self._maxsize:
+				self.pop()
+
+		def pop(self):
+			it = iter(self._cache.keys())
+			del self._cache[next(it)]
+
+		def move_to_end(self, k):
+			if k not in self._cache:
+				return
+			v = self._cache[k]
+			del self._cache[k]
+			self._cache[k] = v
+
+		def __str__(self):
+			return str(self._cache)
+
+		def __repr__(self):
+			return self.__str__()
