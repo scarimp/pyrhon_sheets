@@ -2,6 +2,9 @@
 Classes and Objects
 ===================
 
+.. contents:: Table of Contents
+    :backlinks: none
+
 List Attributes
 ---------------
 

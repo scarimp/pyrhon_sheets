@@ -2,6 +2,9 @@
 Set
 ===
 
+.. contents:: Table of Contents
+    :backlinks: none
+
 Set comprehension
 -----------------
 

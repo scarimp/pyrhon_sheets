@@ -2,6 +2,9 @@
 Dictionary
 ==========
 
+.. contents:: Table of Contents
+    :backlinks: none
+
 Get All Keys
 ------------
 
