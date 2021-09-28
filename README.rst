@@ -45,6 +45,7 @@ Cheat Sheet
 - `List <docs/notes/python-list.rst>`_
 - `Set <docs/notes/python-set.rst>`_
 - `Dictionary <docs/notes/python-dict.rst>`_
+- `Heap <docs/notes/python-heap.rst>`_
 - `Function <docs/notes/python-func.rst>`_
 - `Class <docs/notes/python-object.rst>`_
 - `Generator <docs/notes/python-generator.rst>`_
