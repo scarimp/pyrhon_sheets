@@ -665,3 +665,27 @@ Circular Buffer
     ...         return deque(f, n)
     ...
     >>> tail("/etc/hosts")
+
+
+Groupby
+-------
+
+.. code-block:: python
+
+    >>> import itertools
+    >>> s = "AAABBCCCCC"
+    >>> for k, v in itertools.groupby(s):
+    ...     print(k, list(v))
+    ...
+    A ['A', 'A', 'A']
+    B ['B', 'B']
+    C ['C', 'C', 'C', 'C', 'C']
+
+    # group by key
+
+    >>> x = [('gp1', 'a'), ('gp2', 'b'), ('gp2', 'c')]
+    >>> for k, v in itertools.groupby(x, lambda x: x[0]):
+    ...     print(k, list(v))
+    ...
+    gp1 [('gp1', 'a')]
+    gp2 [('gp2', 'b'), ('gp2', 'c')]
