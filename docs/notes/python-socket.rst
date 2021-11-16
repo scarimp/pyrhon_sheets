@@ -1330,7 +1330,7 @@ output:
     Hi! Parent!
     ...
 
-Using sendfile do copy
+Using sendfile to copy
 ------------------------
 
 .. code-block:: python
