@@ -666,6 +666,18 @@ Circular Buffer
     ...
     >>> tail("/etc/hosts")
 
+Chunk
+-----
+
+.. code-block:: python
+
+    >>> def chunk(lst, n):
+    ...     for i in range(0, len(lst), n):
+    ...         yield lst[i:i+n]
+    ...
+    >>> a = [1, 2, 3, 4, 5, 6, 7, 8]
+    >>> list(chunk(a, 3))
+    [[1, 2, 3], [4, 5, 6], [7, 8]]
 
 Groupby
 -------
