@@ -717,3 +717,15 @@ Binary Search
     0
     >>> binary_search(a, 2)
     3
+
+Lexicographically Order
+-----------------------
+
+.. code-block:: python
+
+    # python compare lists lexicographically
+
+    >>> a = [(1,2), (1,1), (1,0), (2,1)]
+    >>> a.sort()
+    >>> a
+    [(1, 0), (1, 1), (1, 2), (2, 1)]
