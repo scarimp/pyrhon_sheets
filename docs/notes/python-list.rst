@@ -701,3 +701,19 @@ Groupby
     ...
     gp1 [('gp1', 'a')]
     gp2 [('gp2', 'b'), ('gp2', 'c')]
+
+Binary Search
+-------------
+
+.. code-block:: python
+
+    >>> def binary_search(arr, x, lo=0, hi=None):
+    ...     if not hi: hi = len(arr)
+    ...     pos = bisect_left(arr, x, lo, hi)
+    ...     return pos if pos != hi and arr[pos] == x else -1
+    ...
+    >>> a = [1, 1, 1, 2, 3]
+    >>> binary_search(a, 1)
+    0
+    >>> binary_search(a, 2)
+    3
