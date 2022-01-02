@@ -718,6 +718,30 @@ Binary Search
     >>> binary_search(a, 2)
     3
 
+Lower Bound
+-----------
+
+.. code-block:: python
+
+    >>> import bisect
+    >>> a = [1,2,3,3,4,5]
+    >>> bisect.bisect_left(a, 3)
+    2
+    >>> bisect.bisect_left(a, 3.5)
+    4
+
+Upper Bound
+-----------
+
+.. code-block:: python
+
+    >>> import bisect
+    >>> a = [1,2,3,3,4,5]
+    >>> bisect.bisect_right(a, 3)
+    4
+    >>> bisect.bisect_right(a, 3.5)
+    4
+
 Lexicographically Order
 -----------------------
 
