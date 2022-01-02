@@ -643,6 +643,33 @@ Sorted List
 
     print(bar) # [Foo(0), Foo(1), Foo(2), Foo(3)]
 
+New a List
+----------
+
+.. code-block:: python
+
+    # new a list with size = 3
+
+    >>> [0] * 3
+    [0, 0, 0]
+
+    # new a 2d list with size 3x3
+
+    >>> [[0] * 3 for _ in range(3)]
+    [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+
+Note that we should avoid creating a multi-dimension list via the following
+snippet because all objects in the list point to the same address.
+
+.. code-block:: python
+
+    >>> a = [[0] * 3] * 3
+    >>> a
+    [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+    >>> a[1][1] = 2
+    >>> a
+    [[0, 2, 0], [0, 2, 0], [0, 2, 0]]
+
 
 Circular Buffer
 ---------------
