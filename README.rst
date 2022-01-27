@@ -6,7 +6,9 @@
       <a href="https://www.pythonsheets.com"><img src="docs/_static/logo.svg" alt="pysheeet" width=200"></a>
     </h1>
     <p align="center">
-      <img src="https://github.com/crazyguitar/pysheeet/actions/workflows/pythonpackage.yml/badge.svg" alt="Build Status">
+      <a href="https://github.com/crazyguitar/pysheeet/actions">
+        <img src="https://github.com/crazyguitar/pysheeet/actions/workflows/pythonpackage.yml/badge.svg" alt="Build Status">
+      </a>
       <a href="https://coveralls.io/github/crazyguitar/pysheeet?branch=master">
         <img src="https://coveralls.io/repos/github/crazyguitar/pysheeet/badge.svg?branch=master" alt="Coverage">
       </a>
