@@ -780,3 +780,52 @@ Lexicographically Order
     >>> a.sort()
     >>> a
     [(1, 0), (1, 1), (1, 2), (2, 1)]
+
+Trie
+----
+
+.. code-block:: python
+
+    >>> from functools import reduce
+    >>> from collections import defaultdict
+    >>> Trie = lambda: defaultdict(Trie)
+    >>> prefixes = ['abc', 'de', 'g']
+    >>> trie = Trie()
+    >>> end = True
+    >>> for p in prefixes:
+    ...     reduce(dict.__getitem__, p, trie)[end] = p
+    ...
+
+    # search prefix
+
+    >>> def find(trie, word):
+    ...     curr = trie
+    ...     for c in word:
+    ...         if c not in curr:
+    ...             return False
+    ...         curr = curr[c]
+    ...     return True
+    ...
+    >>> find(trie, "abcdef")
+    False
+    >>> find(trie, "abc")
+    True
+    >>> find(trie, "ab")
+    True
+
+    # search word
+
+    >>> def find(trie, p):
+    ...     curr = trie
+    ...     for c in p:
+    ...         if c not in curr or True in curr:
+    ...             break
+    ...         curr = curr[c]
+    ...     return True if True in curr else False
+    ...
+    >>> find(trie, "abcdef")
+    True
+    >>> find(trie, "abc")
+    True
+    >>> find(trie, "ab")
+    False
